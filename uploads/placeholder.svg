@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="商品圖片">
+  <rect width="800" height="600" fill="#f1e3cf"/>
+  <path d="M285 390l78-96 58 65 45-49 78 80H285z" fill="#b98c62" opacity=".75"/>
+  <circle cx="338" cy="235" r="38" fill="#d4ae86"/>
+  <text x="400" y="475" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#6f4a32">Zipangu 商品圖片</text>
+</svg>
