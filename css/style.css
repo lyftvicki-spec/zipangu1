@@ -290,8 +290,20 @@ a:hover { color: var(--primary-dark); }
 .listing-title { font-size: 24px; font-weight: 700; color: #222; line-height: 1.35; margin: 0 0 14px; }
 .listing-seller { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
 .listing-avatar {
-  width: 44px; height: 44px; border-radius: 50%; background: var(--primary);
-  color: #fff; font-weight: 800; font-size: 20px; display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; flex: 0 0 44px; border-radius: 50%;
+  background-color: #fff;
+  background-image: url('../uploads/brands/1786015200897_417732.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+  color: transparent;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.listing-seller.brand-muxiang .listing-avatar {
+  background-image: url('../uploads/brands/1786016270663_716685.webp');
 }
 .listing-seller-meta { line-height: 1.4; }
 .listing-shop-name { font-weight: 600; color: #222; font-size: 15px; text-decoration: none; }
