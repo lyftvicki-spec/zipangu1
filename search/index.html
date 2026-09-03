@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <base href="../">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>搜尋商品 | Zipangu 日盤古紙木藝創</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .search-page { padding: 30px 0 60px; }
+    .search-heading { margin: 0 0 20px; font-size: 26px; color: #222; }
+    .search-page-form { display: flex; max-width: 680px; margin-bottom: 26px; }
+    .search-page-form input { flex: 1; min-width: 0; padding: 12px 14px; border: 1px solid #b69a72; border-radius: 6px 0 0 6px; font-size: 16px; }
+    .search-page-form button { padding: 0 24px; border: 0; border-radius: 0 6px 6px 0; background: var(--primary); color: #fff; font-size: 16px; cursor: pointer; }
+    .search-status { margin: 18px 0; color: #5f5143; }
+    .search-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
+    .search-card { display: block; overflow: hidden; border: 1px solid rgba(90, 65, 40, .18); border-radius: 10px; background: rgba(255,255,255,.6); color: #222; text-decoration: none; box-shadow: 0 3px 10px rgba(60,40,20,.08); }
+    .search-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(60,40,20,.14); }
+    .search-card img { width: 100%; height: 190px; display: block; object-fit: cover; background: #eee; }
+    .search-card-body { padding: 14px; }
+    .search-card h2 { margin: 0 0 8px; font-size: 17px; line-height: 1.4; }
+    .search-category { font-size: 13px; color: #766654; }
+    .search-price { margin-top: 9px; font-weight: 700; color: #7c4e25; }
+    @media (max-width: 600px) {
+      .search-page { padding: 22px 14px 45px; }
+      .search-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .search-card img { height: 145px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="static-demo-note">GitHub 展示版｜可瀏覽網站與商品，登入、購物車、付款及後台功能需使用正式主機。</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="" class="logo">
+        <span class="logo-main">Zipangu 日盤古紙木藝創</span>
+        <span class="logo-sub">手作品牌網站</span>
+      </a>
+      <nav class="main-nav">
+        <div class="nav-item"><a href="category/paper-lights">紙雕系列</a></div>
+        <div class="nav-item"><a href="category/sub-1786025901842">3D列印系列</a></div>
+        <div class="nav-item"><a href="category/laser-model">雷雕系列</a></div>
+        <div class="nav-item"><a href="category/resin-art">環氧樹脂藝術系列</a></div>
+        <div class="nav-item"><a href="category/file-paper">電子檔下載</a></div>
+        <div class="nav-item"><a href="category/ceramic-vase">陶瓷器藝品</a></div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container search-page">
+    <nav class="breadcrumb"><a href="">首頁</a> › <b>搜尋商品</b></nav>
+    <h1 class="search-heading">搜尋商品</h1>
+    <form class="search-page-form" action="search" method="get">
+      <input id="searchInput" type="search" name="q" placeholder="輸入商品名稱或分類…" autocomplete="off">
+      <button type="submit">搜尋</button>
+    </form>
+    <p id="searchStatus" class="search-status" aria-live="polite"></p>
+    <div id="searchResults" class="search-grid"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-main"><div class="footer-info"><p class="footer-tagline">紙 、木與光影的藝術&nbsp;&nbsp;&nbsp;藝術和手工藝之間的分野</p></div></div>
+      <div class="footer-brands">
+        <div class="footer-brand"><p class="footer-brand-name">Zipangu 日盤古紙木藝創</p><img src="uploads/brands/1786015200897_417732.webp" alt="Zipangu 日盤古紙木藝創" class="footer-brand-logo"></div>
+        <div class="footer-brand"><p class="footer-brand-name">沐享工作室</p><img src="uploads/brands/1786016270663_716685.webp" alt="沐享工作室" class="footer-brand-logo"></div>
+      </div>
+      <nav class="footer-nav"><a href="about">關於我們</a><a href="returns">退換貨政策</a><a href="policy">服務條款及隱私政策</a></nav>
+      <p class="footer-copy">Copyright © 2026 Zipangu 日盤古紙木藝創</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var productIds = [11,12,13,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,48,49,50,51,53,55,56,57,58,60,61,62,64];
+      var params = new URLSearchParams(location.search);
+      var query = (params.get('q') || '').trim();
+      var input = document.getElementById('searchInput');
+      var status = document.getElementById('searchStatus');
+      var results = document.getElementById('searchResults');
+      input.value = query;
+
+      if (!query) {
+        status.textContent = '請輸入想找的商品名稱或分類。';
+        return;
+      }
+
+      status.textContent = '正在搜尋「' + query + '」…';
+      var normalizedQuery = query.toLocaleLowerCase('zh-Hant');
+
+      Promise.all(productIds.map(function (id) {
+        return fetch('product/' + id + '/index.html')
+          .then(function (response) { return response.ok ? response.text() : ''; })
+          .then(function (html) {
+            if (!html) return null;
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var titleEl = doc.querySelector('.listing-title');
+            if (!titleEl) return null;
+            var title = titleEl.textContent.trim();
+            var categoryEl = doc.querySelector('.breadcrumb a:nth-of-type(2)');
+            var category = categoryEl ? categoryEl.textContent.trim() : '';
+            var shopEl = doc.querySelector('.listing-shop-name');
+            var shop = shopEl ? shopEl.textContent.trim() : '';
+            var haystack = (title + ' ' + category + ' ' + shop).toLocaleLowerCase('zh-Hant');
+            if (haystack.indexOf(normalizedQuery) === -1) return null;
+            var imageEl = doc.querySelector('#galleryMain');
+            var priceEl = doc.querySelector('.listing-price');
+            return {
+              id: id,
+              title: title,
+              category: category,
+              image: imageEl ? imageEl.getAttribute('src') : '',
+              price: priceEl ? priceEl.textContent.trim().replace(/\s+/g, ' ') : ''
+            };
+          })
+          .catch(function () { return null; });
+      })).then(function (items) {
+        var matches = items.filter(Boolean);
+        status.textContent = matches.length ? '找到 ' + matches.length + ' 項符合「' + query + '」的商品' : '找不到符合「' + query + '」的商品。';
+        matches.forEach(function (item) {
+          var card = document.createElement('a');
+          card.className = 'search-card';
+          card.href = 'product/' + item.id + '/';
+          var img = document.createElement('img');
+          img.src = item.image;
+          img.alt = item.title;
+          img.loading = 'lazy';
+          var body = document.createElement('div');
+          body.className = 'search-card-body';
+          var title = document.createElement('h2');
+          title.textContent = item.title;
+          var category = document.createElement('div');
+          category.className = 'search-category';
+          category.textContent = item.category;
+          var price = document.createElement('div');
+          price.className = 'search-price';
+          price.textContent = item.price;
+          body.appendChild(title);
+          body.appendChild(category);
+          body.appendChild(price);
+          card.appendChild(img);
+          card.appendChild(body);
+          results.appendChild(card);
+        });
+      });
+    }());
+  </script>
+</body>
+</html>
